@@ -1,6 +1,6 @@
 @all: thesis.pdf;
 
-thesis.pdf: thesis.tex DEP
+thesis.pdf: thesis.tex [DEP]
 {
         rm -f *.aux *.log *.out *.bbl *.blg *.nls
         pdflatex -file-line-error -halt-on-error thesis.tex
