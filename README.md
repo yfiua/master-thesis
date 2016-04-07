@@ -10,3 +10,7 @@ Master thesis LaTeX files.
 * soul
 * titlesec
 * tocbibind
+* ...
+
+## Compilation
+    $ stu
