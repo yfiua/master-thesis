@@ -1,0 +1,153 @@
+% Support package for diploma theses and similar works at the chair of Software Technology at Technische Universit�t Dresden
+% (c) 2005-2007 Steffen Zschaler, based on work by Heinrich Hussmann and Birgit Demuth
+%
+% HISTORY
+% -------
+%
+% [2007-04-23] Added new german spelling of da� when using option ngerman instead of german
+%
+\NeedsTeXFormat{LaTeX2e}[1995/12/01]
+\ProvidesPackage{stthesis}
+% Note that this package is based on the assumption that you are using the book class. This can unfortunately not be checked from
+% within the package. -- Maybe I should make this into a class file...
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Options for declaring the type of thesis
+\DeclareOption{da}{\gdef\@type{\type@DA}} % Diploma Thesis
+\DeclareOption{gb}{\gdef\@type{\type@GB}} % Gro�er Beleg
+\DeclareOption{bs}{\gdef\@type{\type@BS}} % Bachelor
+\DeclareOption{ms}{\gdef\@type{\type@MS}} % Master's Thesis
+
+% Options for language
+\newif\if@germanLang
+\newif\if@ngermanLang
+\DeclareOption{english}{\@germanLangfalse}
+\DeclareOption{german}{\@germanLangtrue\@ngermanLangfalse}
+\DeclareOption{ngerman}{\@germanLangtrue\@ngermanLangtrue}
+
+% Defaults
+\ExecuteOptions{da,ngerman}
+
+\ProcessOptions
+
+% Set Languages
+\if@germanLang
+  \usepackage[german]{babel}
+\else
+  \if@ngermanLang
+    \usepackage[english]{babel}
+  \fi
+\fi
+
+% Make sure the confirmation of independence is set at the end of the document
+\AtEndDocument{\@independenceStatement}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% We don't support footnotes on the title page
+\let\thanks\relax
+\def\@birthday{\typeout{No birthday specified!}}
+\def\birthday#1{\gdef\@birthday{#1}}
+
+\def\@birthplace{\typeout{No birthplace specified!}}
+\def\birthplace#1{\gdef\@birthplace{#1}}
+
+\def\@supervisor{\typeout{No supervisor specified!}}
+\def\supervisor#1{\gdef\@supervisor{#1}}
+
+\def\@hsl{Prof. Dr. rer. nat. habil. Uwe A\ss mann}
+\def\hsl#1{\gdef\@hsl{#1}}
+
+% We overwrite \maketitle to always create a title page and to make it fit our layout
+\gdef\maketitle{%
+  \begin{titlepage}%
+    %\renewcommand{\baselinestretch}{1}
+    %
+    \vspace*{3cm}%
+    \begin{center}%
+      \Large{\@type}\\%
+      \bigskip
+      \huge{\@title}\\
+      \vspace{2cm}
+      \large{\s@authored} 
+      \vfill
+      \Large{\@author}\\
+      \vfill
+      \large{\s@born{\@birthday}{\@birthplace}}\\
+      \vspace{1.5cm}%
+      \vfill%
+      \Large{Technische Universit\"{a}t Dresden}\\%
+      \vfill%
+      \large{Fakult\"{a}t Informatik}\\%
+      \large{Institut f\"{u}r Software- und Multimediatechnik}\\%
+      \large{Lehrstuhl Softwaretechnologie}\\%
+    \end{center}%
+    \vspace{3cm}%
+    \large{\s@supervisor: \@supervisor\\%
+           \s@hsl: \@hsl\\%
+           \\%
+           \s@submitted{\@date}}
+  \end{titlepage}%
+  \global\let\maketitle\relax
+  \global\let\@author\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+	\global\let\@birthday\@empty
+	\global\let\birthday\relax
+	\global\let\@birthplace\@empty
+	\global\let\birthplace\relax
+	\global\let\@supervisor\@empty
+	\global\let\supervisor\relax
+	\global\let\@hsl\@empty
+	\global\let\hsl\relax
+}
+
+% Final Statement of Copyright
+\def\@independenceStatement{%
+  \newpage
+  \pagestyle{empty}
+  \section*{\if@germanLang Erkl\"{a}rung\else Confirmation\fi}%
+    %
+    \if@germanLang %
+      Ich erkl\"{a}re, \if@ngermanLang dass\else da\ss\fi{} ich die vorliegende Arbeit selbst\"{a}ndig, unter Angabe aller Zitate und nur unter Verwendung der
+      angegebenen Literatur und Hilfsmittel angefertigt habe.
+    \else %
+      I confirm that I independently prepared the thesis and that I used only the references and auxiliary means indicated in the
+      thesis.
+    \fi %
+    \\
+    \\
+    \\
+    \\
+    \\
+    \\
+    \\
+    Dresden, \if@germanLang den \fi \@date
+}
+
+% Strings to be used for the type of thesis
+\def\type@DA{\if@germanLang Diplomarbeit\else Diploma Thesis\fi}
+\def\type@GB{Gro\ss er Beleg}
+\def\type@BS{\if@germanLang Bakkalaureatsarbeit\else Bachelor's Thesis\fi}
+\def\type@MS{\if@germanLang Masterarbeit\else Master's Thesis\fi}
+
+% Other Strings
+\if@germanLang
+  \def\s@authored{bearbeitet von}
+  \def\s@born#1#2{geboren am #1 in #2}
+  \def\s@supervisor{Betreuer}
+  \def\s@hsl{Hochschullehrer}
+  \def\s@submitted#1{Eingereicht am #1}
+\else
+  \def\s@authored{submitted by}
+  \def\s@born#1#2{born #1 in #2}
+  \def\s@supervisor{Supervisor}
+  \def\s@hsl{Professor}
+  \def\s@submitted#1{Submitted #1}
+\fi
+
+\endinput
