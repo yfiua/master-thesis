@@ -15,4 +15,5 @@ Master thesis LaTeX files.
 ## Compilation
     $ stu
 After a clean-up:
+
     $ stu @clean
