@@ -1,6 +1,6 @@
 @all: thesis.pdf;
 
-thesis.pdf:
+thesis.pdf: thesis.tex
 {
         rm -f *.aux *.log *.out *.bbl *.blg *.nls
         pdflatex -file-line-error -halt-on-error thesis.tex
@@ -9,3 +9,5 @@ thesis.pdf:
         pdflatex -file-line-error -halt-on-error thesis.tex
         pdflatex -file-line-error -halt-on-error thesis.tex
 }
+
+@clean: { rm -f thesis.pdf }
